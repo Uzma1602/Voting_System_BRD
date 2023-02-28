@@ -29,7 +29,7 @@ class CustomUser(AbstractBaseUser, PermissionsMixin):
     email = models.EmailField(unique=True,null=True,blank=True)
     password=models.CharField(max_length=150,unique=True,null=True,blank=True)
     pic=models.ImageField(upload_to=r'C:\Users\Dell\Desktop\Voting\Vs\accounts\userprofile', height_field=None, width_field=None, max_length=100)
-    aadhar_no=models.IntegerField(unique=True,null=True,blank=True)
+    aadhar_no=models.PositiveIntegerField(unique=True,null=True,blank=True)
     state=models.CharField(max_length=150,null=True,blank=True)
     city=models.CharField(max_length=150,null=True,blank=True)
     pin=models.CharField(max_length=20,null=True,blank=True)
@@ -48,4 +48,4 @@ class CustomUser(AbstractBaseUser, PermissionsMixin):
         return self.email
 
     class Meta: 
-       db_table = 'Accounts'
+       db_table = 'Accounts' 
