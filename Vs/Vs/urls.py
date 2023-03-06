@@ -18,10 +18,16 @@ from django.urls import path,include
 from accounts import urls
 from homeapp import urls
 from searchpageapp import urls
-
+from rest_framework_simplejwt.views import(
+    TokenObtainPairView,TokenRefreshView,
+)
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('',include('accounts.urls')),
     path('',include('homeapp.urls')),
     path('',include('searchpageapp.urls')),
+    path('',include('userscreen.urls'))
+    # path('api/token/',TokenObtainPairView.as_view()),
+    # path('api/token/refresh',TokenRefreshView.as_view()),
+
 ]
