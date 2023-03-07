@@ -26,7 +26,6 @@ urlpatterns = [
     path('',include('accounts.urls')),
     path('',include('homeapp.urls')),
     path('',include('searchpageapp.urls')),
-    path('',include('userscreen.urls'))
     # path('api/token/',TokenObtainPairView.as_view()),
     # path('api/token/refresh',TokenRefreshView.as_view()),
 

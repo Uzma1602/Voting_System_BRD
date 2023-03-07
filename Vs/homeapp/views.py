@@ -1,17 +1,29 @@
 from rest_framework.views import APIView
 from rest_framework.response import Response
-from .models import ElectionList, UserVote, Candidate
-from .serializers import ElectionListSerializer, UserVoteSerializer
+from .models import ElectionList, UserVote, Candidate, ElectionType
+from .serializers import ElectionListSerializer, UserVoteSerializer, ElectionTypeSerializer,CandidateSerializer
 
 from django.utils import timezone
 from datetime import date
-class ElectionListView(APIView):
-    serializer_class = ElectionListSerializer
 
+def addTypeToIncomingData(election_list_data):
+        for each_ele in election_list_data:
+            election_type = ElectionType.objects.get(pk=each_ele['election_type_fk'])
+            ele_type_obj = ElectionTypeSerializer(election_type)
+            each_ele['election_type']= ele_type_obj.data['type']
+
+class ElectionListView(APIView):
     def get(self, request, format=None):
         election_list = ElectionList.objects.all()
-        serializer = self.serializer_class(election_list, many=True)
-        return Response(serializer.data)
+        serializer = ElectionListSerializer(election_list, many=True)
+        election_list_data = serializer.data
+        
+        addTypeToIncomingData(election_list_data)
+
+        return Response(election_list_data)
+
+
+    
 #after voting api 
 class UserVoteView(APIView):
     serializer_class = UserVoteSerializer
@@ -27,7 +39,6 @@ class UserVoteView(APIView):
             serializer.save()
             return Response(serializer.data, status=201)
         return Response(serializer.errors, status=400)
-
 
 #api for filterout the upcoming and past election
 #for upcomg election
@@ -50,19 +61,13 @@ class PastElectionsList(APIView):
         serializer = self.serializer_class(queryset, many=True)
         return Response(serializer.data)
 
-#to show candidates list and logo
 
-#from .models import Candidate
+class CandidateList(APIView):
 
-# class CandidateListView(APIView):
-#     def get(self, request):
-#         candidates = Candidate.objects.all()
-#         data = []
-#         for candidate in candidates:
-#             data.append({
-#                 'id': candidate.can_id,
-#                 'name': candidate.name,
-#                 'des': candidate.des,
-#                 'logo': request.build_absolute_uri(candidate.logo.url),
-#             })
-#         return Response(data)
+    def get(self, request, election_type_id):
+        print("ele type id ", election_type_id)
+        queryset = Candidate.objects.filter(election_type_fk_id=election_type_id)
+        serializer = CandidateSerializer(queryset, many=True)
+        data = serializer.data
+        addTypeToIncomingData(data)
+        return Response(data)
