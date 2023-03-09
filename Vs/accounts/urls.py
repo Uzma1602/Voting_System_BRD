@@ -1,10 +1,10 @@
-from .views import RegisterAPI
+from .views import *
 from django.urls import path
 # from .views import LoginAPI
 
 urlpatterns = [
      path('api/register/',RegisterAPI.as_view(),name='register'),
-    #  path('api/login/',LoginAPI.as_view(),name='login'),
-    #  path('api/logout/',RegisterAPI.as_view(),name='register'),
+     path('signup/',SignupAPI.as_view()),
+     path('login/',LoginAPI.as_view()),
 
 ]

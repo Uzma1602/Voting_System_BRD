@@ -2,7 +2,6 @@ from rest_framework.views import APIView
 from rest_framework.response import Response
 from .models import ElectionList, UserVote, Candidate, ElectionType
 from .serializers import ElectionListSerializer, UserVoteSerializer, ElectionTypeSerializer,CandidateSerializer
-
 from django.utils import timezone
 from datetime import date
 

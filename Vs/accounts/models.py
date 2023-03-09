@@ -11,14 +11,6 @@ class CustomUserManager(BaseUserManager):
         user.password = make_password(password)    
         user.save()    
         return user
-    # def create_superuser(self,email,password): 
-    #     user = self.create_user(email=email,password=password)
-    #     user.is_active = True
-    #     user.is_admin = True 
-    #     user.is_super_user = True
-    #     user.is_staff = True
-    #     user.save(using=self._db)
-    #     return user
    
 
 class CustomUser(AbstractBaseUser, PermissionsMixin):
@@ -30,12 +22,17 @@ class CustomUser(AbstractBaseUser, PermissionsMixin):
     aadhar_no=models.IntegerField(unique=True,null=True,blank=True)
     state=models.CharField(max_length=150,null=True,blank=True)
     city=models.CharField(max_length=150,null=True,blank=True)
+    pic=models.ImageField(upload_to=r'C:\Users\Dell\Desktop\Voting\Vs\accounts\userprofile', height_field=None, width_field=None, max_length=100)
+    aadhar_no=models.PositiveIntegerField(unique=True,null=True,blank=True)
+    state=models.CharField(max_length=150,null=True,blank=True)
+    city=models.CharField(max_length=150,null=True,blank=True)
+    pin=models.CharField(max_length=20,null=True,blank=True)
     dob=models.DateTimeField(null=True,blank=True)
     address=models.CharField(max_length=150,null=True,blank=True)
     is_eligible=models.BooleanField(null=True,blank=True)
     is_valid = models.BooleanField(default=True,null=True,blank=True)
     is_staff=models.BooleanField(default=True,null=True,blank=True)
-    
+
     objects = CustomUserManager()
     
     USERNAME_FIELD = 'email'
