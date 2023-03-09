@@ -25,8 +25,7 @@ SECRET_KEY = 'django-insecure-vto32)wd+f@q1c7ov#5kqjc07m1iq#h^#(dl_iby_%wu4=vtiq
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['e608-2401-4900-1cbd-9361-d81a-404a-5819-b9c6.in.ngrok.io']
-
+ALLOWED_HOSTS = ['*']
 
 # Application definition
 
@@ -37,9 +36,12 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'corsheaders',
     'accounts',
     'rest_framework',
-    'rest_framework_simplejwt',
+    'rest_framework.authtoken',
+    'homeapp',
+    'searchpageapp',
 ]
 
 MIDDLEWARE = [
@@ -79,10 +81,10 @@ WSGI_APPLICATION = 'Vs.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'accounts', 
+        'NAME': 'accounts',
         'USER': 'postgres',
         'PASSWORD': 'Uzma@123',
-        'HOST': 'localhost', 
+        'HOST': 'localhost',
         'PORT': '5432',
     }
 }
@@ -129,3 +131,9 @@ STATIC_URL = 'static/'
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 AUTH_USER_MODEL = 'accounts.CustomUser'
+
+CORS_ORIGIN_ALLOW_ALL = True 
+
+CORS_ORIGIN_WHITELIST = [
+    'http://localhost:8000',
+]
