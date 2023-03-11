@@ -42,20 +42,20 @@ class UserVoteView(APIView):
 #api for filterout the upcoming and past election
 #for upcomg election
 class UpcomingElectionsList(APIView):
-    serializer_class = ElectionListSerializer
+    #serializer_class = ElectionListSerializer
     # permission_classes = [IsAuthenticated]
 
     def get(self, request, format=None):
         today = date.today()
         queryset = ElectionList.objects.filter(start_date__gte=today).order_by('start_date')
-        serializer = self.serializer_class(queryset, many=True)
+        serializer = ElectionListSerializer(queryset, many=True)
         return Response(serializer.data)
     
 #for past elction
 class PastElectionsList(APIView):
     serializer_class = ElectionListSerializer
 
-    def get(self, request, format=None):
+    def get(self, request):
         queryset = ElectionList.objects.filter(end_date__lt=timezone.now())
         serializer = self.serializer_class(queryset, many=True)
         return Response(serializer.data)

@@ -17,10 +17,9 @@ from django.contrib import admin
 from django.urls import path,include
 from accounts import urls
 from homeapp import urls
+from rest_framework_simplejwt.views import TokenRefreshView
 
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('',include('accounts.urls')),
-    #path('',include('homeapp.urls')),
-    
-]
+    path('api/token/refresh/', TokenRefreshView.as_view(), name='token_refresh'),]
