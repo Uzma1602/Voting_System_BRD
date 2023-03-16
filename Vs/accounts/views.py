@@ -23,12 +23,19 @@ class SignupAPI(APIView):
         if flag == True:
             return Response({"status":400,"message":"User already exist"})
         else:
+            # print("This is else part")
             serializer = SignupSerializer(data=body)
-            if serializer.is_valid():
+            if serializer.is_valid(raise_exception=True):
                 serializer.save()
-                return Response({"status":200,"message":"Data saved succesfully"})
+                #return Response({"status":200,"message":"Data saved succesfully"})
+                user = CustomUser.objects.get(email=body['email'])
+                refresh = RefreshToken.for_user(user)
+                return Response({"success": True, "message": "Your account has been successfully activated!!",
+                                 'refresh': str(refresh),
+                                 'access': str(refresh.access_token)},
+                                status=status.HTTP_200_OK)
             else: 
-                 return Response({"status":400,"message":"Data Invalid"})
+                return Response({"status":400,"message":"Data Invalid"})
     
 class LoginAPI(APIView):
     def post(self,request):
@@ -36,13 +43,12 @@ class LoginAPI(APIView):
         password=request.data.get('password')
         flag=user_validation(phone,password)
         if flag==True:
-            return Response(True)
+            return Response({"status":200,"message":"Login successfully"})
         else:
-            return Response(False)
+            return Response({"status":200,"message":"Invalid credentials"})
 
 class AddressView(APIView): 
-    # authentication_classes = [JWTAuthentication]
-    # permission_classes = [IsAuthenticated]
+    permission_classes = [IsAuthenticated]
     def post(self, request):
         body=request.data
         serializer = LocationSerializer(data=body)
@@ -57,8 +63,7 @@ class AddressView(APIView):
 
 
 class ProfileView(APIView):
-    # authentication_classes = [JWTAuthentication]
-    # permission_classes = [IsAuthenticated]
+    permission_classes = [IsAuthenticated]
 
     def post(self,request):
         body=request.data
@@ -66,18 +71,7 @@ class ProfileView(APIView):
         serializer =ProfileSerializer(data=body)
         if serializer.is_valid(raise_exception=True):
             serializer.save()
-            #return Response({"success": True, "message": "Your account has been successfully activated!!"})
-
-            user = CustomUser.objects.get(email=body['email'])
-            print("user -> ", user)
-           
-            refresh = RefreshToken.for_user(user)
-            print(refresh)
-
-            return Response({"success": True, "message": "Your account has been successfully activated!!",
-                                 'refresh': str(refresh),
-                                 'access': str(refresh.access_token)},
-                                status=status.HTTP_200_OK)
+            return Response({"success": True, "message": "Your account has been successfully activated!!"})    
            
         else:
             return Response({"status":400,"message":"Data Invalid"})

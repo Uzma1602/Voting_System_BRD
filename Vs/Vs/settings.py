@@ -10,6 +10,10 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/4.1/ref/settings/
 """
 
+import environ
+from pathlib import Path
+env = environ.Env()
+environ.Env.read_env()
 from pathlib import Path
 from datetime import timedelta
 #from .middleservice import CorsMiddleware
@@ -38,6 +42,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'corsheaders',
+    'phone_verify',
     'accounts',
     'rest_framework',
     'rest_framework.authtoken',
@@ -83,16 +88,29 @@ WSGI_APPLICATION = 'Vs.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/4.1/ref/settings/#databases
 
-DATABASES = {
+# DATABASES = {
+#     'default': {
+#         'ENGINE': 'django.db.backends.postgresql',
+#         'NAME': 'accounts',
+#         'USER': 'postgres',
+#         'PASSWORD': 'Uzma@123',
+#         'HOST': 'localhost',
+#         'PORT': '5432',
+#     }
+# }
+
+DATABASES = { 
     'default': {
-        'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'accounts',
-        'USER': 'postgres',
-        'PASSWORD': 'Uzma@123',
-        'HOST': 'localhost',
-        'PORT': '5432',
-    }
+    'ENGINE': 'django.db.backends.postgresql_psycopg2',
+    'NAME': env('DB_NAME'),
+    'USER': env('DB_USER'),
+    'PASSWORD': env('DB_PASSWORD'),
+    'HOST': env('DB_HOST'),
+    'PORT': '5432',
+     }
 }
+
+
 
 # Password validation
 # https://docs.djangoproject.com/en/4.1/ref/settings/#auth-password-validators
@@ -195,7 +213,3 @@ CORS_ALLOW_HEADERS = [
 
 CORS_ORIGIN_ALLOW_ALL = True 
 
-# CORS_ORIGIN_WHITELIST = [
-#     'http://localhost:3000',
-#     'http://localhost:8000',
-# ]
